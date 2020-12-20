@@ -1,5 +1,7 @@
 package com.iiitb.academics.controller;
 
+import com.iiitb.academics.bean.MyCourseModel;
+import com.iiitb.academics.bean.MyModel;
 import com.iiitb.academics.bean.Students;
 import com.iiitb.academics.services.AcademicServices;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +25,7 @@ public class StudentController {
     }
 
     @GetMapping("/Students/{email}")
-    public Students getStudent(@PathVariable(value = "email") String email){
+    public List<MyCourseModel> getStudent(@PathVariable(value = "email") String email){
         return services.findByEmail(email);
     }
 }

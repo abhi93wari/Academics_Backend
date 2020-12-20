@@ -3,7 +3,9 @@ package com.iiitb.academics.services;
 import com.iiitb.academics.bean.*;
 import com.iiitb.academics.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,12 +31,14 @@ public class AcademicServices {
     @Autowired
     private EmployeeRepo employeeRepo;
 
+
+
     public List<Students> getAll(){
         return repo.findAll();
 
     }
 
-    public Students findByEmail(String email)
+    public List<MyCourseModel> findByEmail(String email)
     {
         List<Students> students = getAll();
         Students student = null;
@@ -43,6 +47,12 @@ public class AcademicServices {
                 student = s;
                 break;
             }
+        }
+
+        if(student==null){
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Invalid Email"
+            );
         }
 
         List<Student_Courses> mycourses = getStudCoursebyId(student.getStudent_id());
@@ -55,14 +65,61 @@ public class AcademicServices {
         List<Courses> coursesDetails = getMyCourses(courseIds);
         List<Course_Schedule> mySchedule = getmySchedule(courseIds);
 
+        List<Employees> employees = getAllEmp();
+        List<Course_TA> mytas = getTAs(courseIds);
+
+
+
 
         System.out.println("Student Details is "+student+"\n");
         System.out.println("Course Details is "+coursesDetails+"\n");
         System.out.println("Schedule Details is "+mySchedule+"\n");
         System.out.println();
 
+        List<MyCourseModel> cmList = new ArrayList<>();
 
-        return student;
+        for(Courses c: coursesDetails){
+            MyCourseModel cm = new MyCourseModel();
+            cm.setCourse_id(c.getCourse_id());
+            cm.setCourse_code(c.getCourse_code());
+            cm.setName(c.getName());
+
+            for(Employees e : employees){
+                if(e.getEmployees_id()==c.getFaculty()){
+                    cm.setFaculty_name(e.getFirst_name()+" "+e.getLast_name());
+                }
+            }
+
+            List<MyDays> myDays = new ArrayList<>();
+
+            for(Course_Schedule cs : mySchedule){
+                if(cs.getCourse_id()==c.getCourse_id()){
+                    MyDays myDay = new MyDays(cs.getTime(),cs.getDay(),cs.getRoom());
+                    myDays.add(myDay);
+
+                }
+            }
+            for(Course_TA ta : mytas){
+                if(ta.getCourse_id()==c.getCourse_id()){
+                    List<Students> talist = getAll();
+                    for(Students s: talist){
+                        if(s.getStudent_id() == ta.getStudent_id()){
+                            cm.setTa_name(s.getFirst_name()+" "+s.getLast_name());
+                            break;
+                        }
+                    }
+
+                }
+            }
+            cm.setDaysList(myDays);
+            cmList.add(cm);
+
+        }
+
+
+
+        return cmList;
+
     }
 
     public List<Courses> getMyCourses(List<Integer> myCoursesId){
@@ -108,6 +165,22 @@ public class AcademicServices {
 
     }
 
+
+    public List<Course_TA> getTAs(List<Integer> myCoursesId){
+        List<Course_TA> allCoursesTA =  courseTARepo.findAll();
+        List<Course_TA> myCoursesTA = new ArrayList<>();
+
+        for(Course_TA t : allCoursesTA){
+            if(myCoursesId.contains(t.getCourse_id())){
+                myCoursesTA.add(t);
+            }
+        }
+        return myCoursesTA;
+    }
+
+    public List<Employees> getAllEmp(){
+        return employeeRepo.findAll();
+    }
 
 
 
