@@ -38,7 +38,7 @@ public class AcademicServices {
 
     }
 
-    public List<MyCourseModel> findByEmail(String email)
+    public MyModel findByEmail(String email)
     {
         List<Students> students = getAll();
         Students student = null;
@@ -116,9 +116,12 @@ public class AcademicServices {
 
         }
 
+        MyModel myModel = new MyModel(student.getStudent_id(),student.getFirst_name(),student.getLast_name(),student.getRoll_no(),student.getEmail(),cmList);
 
 
-        return cmList;
+
+
+        return myModel;
 
     }
 

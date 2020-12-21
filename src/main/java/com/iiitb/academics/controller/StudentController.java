@@ -25,7 +25,7 @@ public class StudentController {
     }
 
     @GetMapping("/Students/{email}")
-    public List<MyCourseModel> getStudent(@PathVariable(value = "email") String email){
+    public MyModel getStudent(@PathVariable(value = "email") String email){
         return services.findByEmail(email);
     }
 }
