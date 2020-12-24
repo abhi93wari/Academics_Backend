@@ -1,6 +1,7 @@
 package com.iiitb.academics.services;
 
 import com.iiitb.academics.bean.*;
+import com.iiitb.academics.bean.Specialization;
 import com.iiitb.academics.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,6 +31,12 @@ public class AcademicServices {
 
     @Autowired
     private EmployeeRepo employeeRepo;
+
+    @Autowired
+    private DomainRepo domainRepo;
+
+    @Autowired
+    private SpecializationRepo specializationRepo;
 
 
 
@@ -67,6 +74,27 @@ public class AcademicServices {
 
         List<Employees> employees = getAllEmp();
         List<Course_TA> mytas = getTAs(courseIds);
+
+        List<Domains> domainsList = getAllDomain();
+        List<Specialization> specializationList = getAllSpecialization();
+        String domain_name=null;
+        for(Domains d : domainsList){
+            if(d.getDomain_id() == student.getDomain()){
+                domain_name = d.getProgram();
+            }
+        }
+
+        String spec_code=null;
+        String spec_name=null;
+
+        for(Specialization s : specializationList){
+            if(s.getSpecialization_id()== student.getSpecialization()){
+                spec_code = s.getCode();
+                spec_name = s.getName();
+            }
+        }
+
+
 
 
 
@@ -116,7 +144,7 @@ public class AcademicServices {
 
         }
 
-        MyModel myModel = new MyModel(student.getStudent_id(),student.getFirst_name(),student.getLast_name(),student.getRoll_no(),student.getEmail(),cmList);
+        MyModel myModel = new MyModel(student.getStudent_id(),student.getFirst_name(),student.getLast_name(),student.getRoll_no(),student.getEmail(),domain_name,spec_code,spec_name,cmList);
 
 
 
@@ -183,6 +211,14 @@ public class AcademicServices {
 
     public List<Employees> getAllEmp(){
         return employeeRepo.findAll();
+    }
+
+    public List<Domains> getAllDomain(){
+        return domainRepo.findAll();
+    }
+
+    public List<Specialization> getAllSpecialization(){
+        return specializationRepo.findAll();
     }
 
 

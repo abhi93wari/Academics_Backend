@@ -12,17 +12,22 @@ public class Students {
     String last_name;
     String roll_no;
     String email;
+    int domain;
+    int specialization;
 
     public Students() {
     }
 
-    public Students(int student_id, String first_name, String last_name, String roll_no, String email) {
+    public Students(int student_id, String first_name, String last_name, String roll_no, String email, int domain, int specialization) {
         this.student_id = student_id;
         this.first_name = first_name;
         this.last_name = last_name;
         this.roll_no = roll_no;
         this.email = email;
+        this.domain = domain;
+        this.specialization = specialization;
     }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int getStudent_id() {
@@ -63,5 +68,21 @@ public class Students {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public int getDomain() {
+        return domain;
+    }
+
+    public void setDomain(int domain) {
+        this.domain = domain;
+    }
+
+    public int getSpecialization() {
+        return specialization;
+    }
+
+    public void setSpecialization(int specialization) {
+        this.specialization = specialization;
     }
 }

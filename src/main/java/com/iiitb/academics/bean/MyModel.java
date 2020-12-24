@@ -8,17 +8,22 @@ public class MyModel {
     String last_name;
     String roll_no;
     String email;
+    String domain;
+    String spec_code;
+    String spec_name;
 
     List<MyCourseModel> courses;
 
 
-
-    public MyModel(int student_id, String first_name, String last_name, String roll_no, String email,  List<MyCourseModel> courses) {
+    public MyModel(int student_id, String first_name, String last_name, String roll_no, String email, String domain, String spec_code, String spec_name, List<MyCourseModel> courses) {
         this.student_id = student_id;
         this.first_name = first_name;
         this.last_name = last_name;
         this.roll_no = roll_no;
         this.email = email;
+        this.domain = domain;
+        this.spec_code = spec_code;
+        this.spec_name = spec_name;
         this.courses = courses;
     }
 
@@ -68,5 +73,29 @@ public class MyModel {
 
     public void setCourses( List<MyCourseModel> courses) {
         this.courses = courses;
+    }
+
+    public String getDomain() {
+        return domain;
+    }
+
+    public void setDomain(String domain) {
+        this.domain = domain;
+    }
+
+    public String getSpec_code() {
+        return spec_code;
+    }
+
+    public void setSpec_code(String spec_code) {
+        this.spec_code = spec_code;
+    }
+
+    public String getSpec_name() {
+        return spec_name;
+    }
+
+    public void setSpec_name(String spec_name) {
+        this.spec_name = spec_name;
     }
 }
